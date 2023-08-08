@@ -1,0 +1,12 @@
+{
+  "name": "faceless_jsvmp",
+  "version": "1.0.0",
+  "dependencies": {
+    "@babel/generator": "^7.22.10",
+    "@babel/parser": "^7.22.10",
+    "@babel/template": "^7.22.5",
+    "@babel/traverse": "^7.22.10",
+    "@babel/types": "^7.22.10",
+    "figlet": "^1.6.0"
+  }
+}
