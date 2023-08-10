@@ -35,13 +35,6 @@ const LOG_LIST = [`
 已知问题:
 YieldExpression 语法未实现: yield 
 SpreadElement 语法未实现: ...args 
-
-广告: 
-本项目开源起，星球内上线同步更新课程,零基础的伙伴们可从零课程开始学习，二课程感兴趣可以学习。
-课程:《零.jsvmp原理与AST基础》、《一.手把手带你反编译jsvmp》、《二.手把手带你实现jsvmp》
-逆向知识学习交流(星球): https://t.zsxq.com/104HdF074
-试听公开课请查看的投稿哦，地址: https://space.bilibili.com/247999712
-微信号:AlanHays | QQ号:2757317549
         `];
 // 字节码
 let bytecode = [];
@@ -1135,9 +1128,6 @@ function interpreter(parentScope, index, stack, constantPool, bytecode, option =
                 break
             case IMT["lod_c"]:
                 t0 = bytecode[index++]
-                if (constantPool[t0] == "join") {
-                    debugger
-                }
                 stack.push(constantPool[t0])
                 break
             case IMT["defFunc"]:

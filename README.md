@@ -5,6 +5,17 @@
 <a name="C5UEx"></a>
 # 使用说明
 注：请勿将加固后的代码用于生产环境，由于项目开源导致加固代码很容易被反编译。
+
+环境安装
+```shell
+npm install @babel/parser --save-dev
+npm install @babel/generator --save-dev
+npm install @babel/traverse --save-dev
+npm install @babel/template --save-dev
+npm install @babel/types --save-dev
+npm install figlet --save-dev
+```
+
 <a name="zCdGm"></a>
 ### base目录文件
 待加固的js源文件：source.js <br />编译前预处理的源文件：preprocess.js<br />jsvmp代码加固程序：jsvmp-1.0.0.js（直接run即可）<br />加固后输出的文件：output.js
