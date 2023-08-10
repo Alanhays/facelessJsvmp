@@ -8,12 +8,12 @@
 
 环境安装
 ```shell
-npm install @babel/parser --save-dev
-npm install @babel/generator --save-dev
-npm install @babel/traverse --save-dev
-npm install @babel/template --save-dev
-npm install @babel/types --save-dev
-npm install figlet --save-dev
+npm install @babel/parser
+npm install @babel/generator
+npm install @babel/traverse
+npm install @babel/template
+npm install @babel/types
+npm install figlet
 ```
 
 <a name="zCdGm"></a>

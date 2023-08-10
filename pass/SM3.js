@@ -252,7 +252,7 @@ function sm3Digest(msg) {
     return hashHex;
 }
 
-let txt = sm3Digest("123456789")
-console.log(txt, txt == "3f46b187f9ce6b75f38c002f117695278dbfd2a318a95d36efc0e939ddd7a509")
+let txt = sm3Digest("123456")
+console.log(txt, txt == "207cf410532f92a47dee245ce9b11ff71f578ebd763eb3bbea44ebd043d018fb")
 
 
