@@ -11,7 +11,7 @@ process.argv.length > 4 ? preprocessFile = process.argv[4] : preprocessFile = ".
 let sourceCode = readFileSync(sourceFile, {encoding: "utf-8"});
 // 选项配置
 const CONFIG = {
-    NAME: "faceless", // faceless man | 无脸男 - 胡涛|无颜
+    NAME: "faceless", // faceless man
     ENCODING: true,
     OPEN_LOG: false,
     COMPRESS_CODE: true,
@@ -29,13 +29,9 @@ const {
 
 // 日志列表
 const LOG_LIST = [`
-1.0.0 日志:
-加固代码支持在浏览器和nodejs中运行
-
-已知问题:
-YieldExpression 语法未实现: yield 
-SpreadElement 语法未实现: ...args 
-        `];
+注: 由于项目开源导致加固代码很容易被反编译,
+请勿将加固后的代码用于生产环境。
+`];
 // 字节码
 let bytecode = [];
 // 常量池
@@ -578,6 +574,9 @@ function sourceToByte(node, option = {}) {
             break
         case "CallExpression":
             node.arguments.forEach(n => sourceToByte(n, {pool: "lod_v"}))
+            if (types.isFunctionExpression(node.callee) || types.isSequenceExpression(node.callee)) {
+                poolIndex("lod_c", 0)
+            }
             if (types.isIdentifier(node.callee)) {
                 bytecode.push(IMT['localScope'])
             }
@@ -1115,7 +1114,11 @@ function interpreter(parentScope, index, stack, constantPool, bytecode, option =
                 t2 = stack.pop() // 对象
                 args = [];
                 for (t3 = 0; t3 < t0; t3++) args.unshift(stack.pop());
-                t4 = t2[t1].apply(t2, args);
+                if (t2 === 0) {
+                    t4 = t1.apply(localScope, args);
+                } else {
+                    t4 = t2[t1].apply(t2, args);
+                }
                 t5 = bytecode[index++];
                 if (t5) stack.push(t4);
                 break

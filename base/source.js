@@ -18,4 +18,6 @@ for (let char of str) {
     console.log(char);
 }
 
-
+(0, 0, function (x) {
+    console.log(x)
+})(123)

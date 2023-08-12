@@ -48,3 +48,6 @@ for (let _F_iterator = str[Symbol.iterator](), _F_i = _F_iterator.next(); !_F_i.
   let char = _F_i.value;
   console.log(char);
 }
+(0, 0, function (x) {
+  console.log(x);
+})(123);

@@ -18,13 +18,24 @@ npm install figlet
 
 <a name="zCdGm"></a>
 ### base目录文件
-待加固的js源文件：source.js <br />编译前预处理的源文件：preprocess.js<br />jsvmp代码加固程序：jsvmp-1.0.0.js（直接run即可）<br />加固后输出的文件：output.js
-<a name="wmIXS"></a>
-### pass目录文件
-> 已通过测试的算法有 HMAC-SHA256 | MD5 | SHA1 | SHA256 | SM3 
+> 已通过测试的算法有 HMAC-SHA256 | MD5 | SHA1 | SHA256 | SM3 | SM4 ...
 
-存放一些通过测试的加密算法
-<a name="LgVWw"></a>
+├── base                    // 基础目录 <br />
+│   ├── source.js           // 待加固的js源文件 <br />
+│   ├── preprocess.js       // 编译前预处理的源文件 <br />
+│   ├── main.js             // js代码加固程序-jsvmp （直接run即可） <br />
+│   └── output.js           // 输出的加固文件 <br />
+├── pass                    // 测试通过文件目录 <br />
+│   ├── HMAC-SHA256.js      
+│   ├── MD5.js                  
+│   ├── SHA1.js                      
+│   ├── SHA256.js                    
+│   ├── SM3.js                  
+│   └── SM4.js              
+├── README.md               // 项目的说明文档 <br />
+├── package.json            // npm包配置文件，里面定义了项目的npm脚本，依赖包等信息 <br />
+└── package-lock.json       
+
 # 实现原理
 <a name="wGqOl"></a>
 ### 二进制代码虚拟化保护的基本步骤
@@ -35,6 +46,26 @@ npm install figlet
 <a name="vKWCT"></a>
 ### JavaScript 代码虚拟化过程示例
 ![image.png](https://cdn.nlark.com/yuque/0/2023/png/26634545/1687165382564-4e8b1055-dfee-4588-bef8-ab922dc38f5a.png#averageHue=%23f7f6f4&clientId=udca881f6-3b4d-4&from=paste&height=245&id=u3a34f9ba&originHeight=245&originWidth=773&originalType=binary&ratio=1&rotation=0&showTitle=false&size=53585&status=done&style=none&taskId=u664c4f36-e5df-49e7-a82a-6cfd42ee8e0&title=&width=773)
+
+# 更新日志
+
+**1.0.1 日志:**
+
+1.新增适配SM4加密算法
+
+2.修复自执行语法执行异常问题
+(function (x) {
+    console.log(x)
+})(0)
+
+**1.0.0 日志:**
+
+1.加固代码支持在浏览器和nodejs中运行
+
+2.已知问题:
+YieldExpression 语法未实现: yield 
+SpreadElement 语法未实现: ...args
+
 
 <a name="zvI5D"></a>
 # 已知问题
