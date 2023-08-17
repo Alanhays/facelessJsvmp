@@ -1,27 +1,31 @@
-const parser = require("@babel/parser");
-const generator = require("@babel/generator").default;
-const traverse = require("@babel/traverse").default;
-const template = require("@babel/template").default;
-const types = require("@babel/types");
-const {textSync} = require('figlet');
-const {readFileSync, writeFileSync} = require("fs");
-process.argv.length > 2 ? sourceFile = process.argv[2] : sourceFile = "./source.js";
-process.argv.length > 3 ? outputFile = process.argv[3] : outputFile = "./output.js";
-process.argv.length > 4 ? preprocessFile = process.argv[4] : preprocessFile = "./preprocess.js";
-let sourceCode = readFileSync(sourceFile, {encoding: "utf-8"});
+if (typeof window === "undefined") {
+    require("../tools/babelPlugins");
+    var {readFileSync, writeFileSync} = require("fs");
+    process.argv.length > 2 ? sourceFile = process.argv[2] : sourceFile = "./source.js";
+    process.argv.length > 3 ? outputFile = process.argv[3] : outputFile = "./output.js";
+    process.argv.length > 4 ? preprocessFile = process.argv[4] : preprocessFile = "./preprocess.js";
+    var sourceCode = readFileSync(sourceFile, {encoding: "utf-8"});
+    window = {
+        "exports": exports,
+        "require": require,
+        "module": module,
+        "__dirname": __dirname,
+        "__filename": __filename,
+    };
+    window.__proto__ = global;
+}
+
 // 选项配置
 const CONFIG = {
     NAME: "faceless", // faceless man
     ENCODING: true,
-    OPEN_LOG: false,
-    COMPRESS_CODE: true,
+    COMPRESS_CODE: false,
     EXPORT_JSVMP: true,
-    SHOW_DETAIL: true,
+    SHOW_DETAIL: false,
 }
 const {
     NAME,               // logo
     ENCODING,           // 指令编码
-    OPEN_LOG,           // 开启日志(调试小代码块使用)
     COMPRESS_CODE,      // 压缩输出代码
     EXPORT_JSVMP,       // 导出加固代码(需同时开启ENCODING) 注: 开启后运行此文件不会执行解释器
     SHOW_DETAIL,        // 显示详细内容
@@ -32,6 +36,13 @@ const LOG_LIST = [`
 注: 由于项目开源导致加固代码很容易被反编译,
 请勿将加固后的代码用于生产环境。
 `];
+// logo log
+if (NAME) {
+    console.log(facelessLogo);
+    for (let i = 0; i < LOG_LIST.length; i++) {
+        console.log(LOG_LIST[i])
+    }
+}
 // 字节码
 let bytecode = [];
 // 常量池
@@ -107,17 +118,6 @@ let operator = [
 //  全局变量
 let globalVariable = [];
 let _ = "------------------";
-// 全局作用域
-if (typeof window === "undefined") {
-    window = {
-        "exports": exports,
-        "require": require,
-        "module": module,
-        "__dirname": __dirname,
-        "__filename": __filename,
-    };
-    window.__proto__ = global;
-}
 
 //  未解析的节点
 function unresolvedNode(node) {
@@ -285,27 +285,19 @@ function preprocess(ast) {
     traverse(ast, adapt);
     traverse(ast, promoteVariable);
     // 预处理代码保存
-    writeFileSync(preprocessFile, generator(ast).code, (e) => {
-    })
+    if (typeof global !== "undefined") {
+        writeFileSync(preprocessFile, generator(ast).code, (e) => {
+        })
+    }
+
     return ast
 }
 
 // 虚拟化源代码
 function virtualizationSourceCode(sourceCode) {
+    constantPool = [`@${NAME}`, "arguments", "__proto__"],bytecode = [],globalVariable = [];
     //  解析源代码为AST
     let ast = parser.parse(sourceCode);
-    // logo log
-    if (NAME) {
-        console.log(textSync(NAME));
-        for (let i = 0; i < LOG_LIST.length; i++) {
-            console.log(LOG_LIST[i])
-        }
-    }
-    // 动态指令编码 基础指令
-    // if (DYNAMIC) {
-    //     // instruction = instruction.sort(() => 0.5 - Math.random())
-    //     // operator = operator.sort(() => 0.5 - Math.random())
-    // }
     // 添加运算符
     instruction = instruction.concat(operator);
     instruction.forEach(k => IMT[k] = k);
@@ -314,6 +306,7 @@ function virtualizationSourceCode(sourceCode) {
     // 预处理源代码
     let {program} = preprocess(ast);
     let nodes = program.body;
+
     for (let i = 0; i < nodes.length; i++) {
         let node = nodes[i];
         sourceToByte(node);
@@ -351,9 +344,7 @@ function virtualizationSourceCode(sourceCode) {
         let handlerCode = outputHandlerCode(parser.parse(interpreter.toString()));
         let appendCode = ")(typeof window !== 'undefined' ? window : (window = global, window)"
             + `, 0, [],${JSON.stringify(constantPool)}, ${JSON.stringify(bytecode)})`;
-        writeFileSync(outputFile, `(${handlerCode + appendCode}`, (e) => {
-        })
-        console.info(`info -> 加固代码已保存至 ${__dirname}\\output.js!\n`)
+        return `(${handlerCode + appendCode}`;
     } else {
         // 执行测试
         interpreter(window, 0, [], constantPool, bytecode)
@@ -436,7 +427,7 @@ function sourceToByte(node, option = {}) {
             }
             sourceToByte(node.id, {pool: "def_v"})
             if (node.init) {
-                sourceToByte(node.init)
+                sourceToByte(node.init,{pool: "lod_v"})
                 if (types.isIdentifier(node.id)) {
                     bytecode.push(IMT['localScope'])
                 }
@@ -819,7 +810,7 @@ function sourceToByte(node, option = {}) {
             node.cases.forEach(n => t3.push(sourceToByte(n)));
             for (let i = 0; i < t3.length; i++) {
                 let _index = t3[i];
-                bytecode[i * 2 + t1] = "lod_c";
+                bytecode[i * 2 + t1] = IMT["lod_c"];
                 let c_index = poolIndex(null, _index);
                 bytecode[i * 2 + t1 + 1] = c_index;
             }
@@ -936,8 +927,6 @@ function interpreter(parentScope, index, stack, constantPool, bytecode, option =
     while (index < bytecode.length) {
         let t0, t1, t2, t3, t4, t5;
         let instruction = bytecode[index++];
-        let msg = `log -> 指针:${index} | 指令: "${instruction}" | 栈: `;
-        if (typeof OPEN_LOG != "undefined" && OPEN_LOG) console.log(msg, stack);
         switch (instruction) {
             case IMT["="]:
                 t0 = stack.pop() // 标识符
@@ -1338,4 +1327,9 @@ function interpreter(parentScope, index, stack, constantPool, bytecode, option =
     }
 }
 
-virtualizationSourceCode(sourceCode)
+if (typeof global !== "undefined") {
+    let code = virtualizationSourceCode(sourceCode);
+    writeFileSync(outputFile, code, (e) => {
+    })
+    console.info(`info -> 加固代码已保存至 ${__dirname}\\output.js!\n`)
+}
