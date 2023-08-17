@@ -21,7 +21,7 @@
 │   ├── SHA256.js                    
 │   ├── SM3.js                  
 │   └── SM4.js   
-├── pass                    // 工具目录
+├── tools                   // 工具目录
 │   ├── babelPlugins.js     // 打包好的环境
 │   ├── dump.js             // 反编译脚本 
 │   └── env.js              
@@ -47,7 +47,7 @@
 
 1.修复一个let变量相关的问题
 
-2.新增web页面（丑）
+2.新增web页面（丑）https://alanhays.github.io/facelessJsvmp/
 
 **1.0.1 日志:**
 
