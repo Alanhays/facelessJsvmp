@@ -5,9 +5,23 @@
 <a name="C5UEx"></a>
 # 使用说明
 注：请勿将加固后的代码用于生产环境，由于项目开源导致加固代码很容易被反编译。
+> 学习交流QQ群：441030187 
 
-<a name="zCdGm"></a>
-### 目录文件
+<a name="vr9dU"></a>
+### 一.WEB页面步骤
+
+1. 打开链接 [https://alanhays.github.io/facelessJsvmp/](https://alanhays.github.io/facelessJsvmp/)
+2. 在源代码框（左边）粘贴需要加固的代码
+3. 点击执行加固按钮进行加固（如出现“未解析”则表示有未适配的语法）
+4. 加固代码输出后，更具需要可选择“下载代码”或“复制代码”
+<a name="aA93a"></a>
+### 二.项目文件步骤（环境：安装了nodejs即可）
+
+1. test目录下的source.js文件替换为待加固的代码
+2. 执行目录下的main.js进行加固（报错则表示有未适配的语法）
+3. 加固结果为目录下的output.js文件
+<a name="mmcGi"></a>
+# 文件目录
 ```
 ├── test                    // 测试目录
 │   ├── source.js           // 待加固的js源文件
@@ -28,49 +42,20 @@
 ├── index.html 
 ├── README.md               // 项目的说明文档 
 ├── package.json            // npm包配置文件，里面定义了项目的npm脚本，依赖包等信息 
-└── package-lock.json   
+└── package-lock.json
 ```
-> 已通过测试的算法有 HMAC-SHA256 | MD5 | SHA1 | SHA256 | SM3 | SM4 ...
-# 实现原理
-<a name="wGqOl"></a>
-### 二进制代码虚拟化保护的基本步骤
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/26634545/1687165199145-a1f384ec-5041-445b-b7b8-dc9ef1aed17a.png#averageHue=%23edecec&clientId=udca881f6-3b4d-4&from=paste&height=236&id=u0d06e43f&originHeight=236&originWidth=776&originalType=binary&ratio=1&rotation=0&showTitle=false&size=61205&status=done&style=none&taskId=u6677b63f-2fe6-45d0-9825-b32e4db012f&title=&width=776)
-<a name="KLcIj"></a>
-### JSVMP 的保护流程图
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/26634545/1687165290462-a50a4ce7-5d46-4635-902b-0d47e6144608.png#averageHue=%23eeedec&clientId=udca881f6-3b4d-4&from=paste&height=590&id=ub7aa9e77&originHeight=590&originWidth=784&originalType=binary&ratio=1&rotation=0&showTitle=false&size=151473&status=done&style=none&taskId=u3722bd40-d842-44d9-8bb3-b2b8859588f&title=&width=784)
-<a name="vKWCT"></a>
-### JavaScript 代码虚拟化过程示例
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/26634545/1687165382564-4e8b1055-dfee-4588-bef8-ab922dc38f5a.png#averageHue=%23f7f6f4&clientId=udca881f6-3b4d-4&from=paste&height=245&id=u3a34f9ba&originHeight=245&originWidth=773&originalType=binary&ratio=1&rotation=0&showTitle=false&size=53585&status=done&style=none&taskId=u664c4f36-e5df-49e7-a82a-6cfd42ee8e0&title=&width=773)
-
+<a name="23093bb2"></a>
 # 更新日志
-**1.0.2 日志:**
-
-1.修复一个let变量相关的问题
-
-2.新增web页面（丑）https://alanhays.github.io/facelessJsvmp/
-
-**1.0.1 日志:**
-
-1.新增适配SM4加密算法
-
-2.修复自执行语法执行异常问题
+**1.0.3 日志:**<br />1.新发现一个bug（解释器bug）<br />2.新增dump脚本（MD5反编译示例）<br />**1.0.2 日志:**<br />1.修复一个let变量相关的问题<br />2.新增web页面（丑）[https://alanhays.github.io/facelessJsvmp/](https://alanhays.github.io/facelessJsvmp/)<br />**1.0.1 日志:**<br />1.新增适配SM4加密算法<br />2.修复自执行语法执行异常问题
+```javascript
 (function (x) {
-    console.log(x)
+console.log(x)
 })(0)
-
-**1.0.0 日志:**
-
-1.加固代码支持在浏览器和nodejs中运行
-
-2.已知问题:
-YieldExpression 语法未实现: yield 
-SpreadElement 语法未实现: ...args
-
-
+```
+**1.0.0 日志:**<br />1.加固代码支持在浏览器和nodejs中运行
 <a name="zvI5D"></a>
 # 已知问题
 > YieldExpression 语法未实现 ：yield 
-> SpreadElement 语法未实现：...args 
 
 ```javascript
 function* generatorFunction() {
@@ -78,14 +63,37 @@ function* generatorFunction() {
   yield 2;
   yield 3;
 }
+```
+> SpreadElement 语法未实现：...args 
+
+```javascript
 f(...args)
 ```
-<a name="ycXqT"></a>
+> 解释器bug示例，由[零点大佬](https://wx.zsxq.com/dweb2/index/footprint/51514454824814)发现。表现：加固后与执行源代码结果不一致。
+
+```
+function test() {
+    var list = [1, 2];
+    test = function () {
+        return list;
+    };
+    return test();
+}
+
+let y = test();
+y.push(3);
+console.log(test());
+```
+<a name="WhuR3"></a>
+# QQ学习交流群
+> QQ群号：441030187 | 欢迎大家进唠嗑，一起学习共同进步
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/26634545/1694400543247-a5e1122d-311e-4c9c-9fd0-1d03245d5f33.png#averageHue=%23f7f7f2&clientId=u0aec66c3-c070-4&from=paste&height=497&id=u6f0909bb&originHeight=497&originWidth=302&originalType=binary&ratio=1&rotation=0&showTitle=false&size=59784&status=done&style=none&taskId=uc09ed8c6-dd37-4c8e-b8fc-6dbbfc6e8c4&title=&width=302)
+<a name="wBeMH"></a>
 # 参考文献
-JSVMP论文和专利：[JSVMP 论文和专利.rar - 蓝奏云](https://surans.lanzouw.com/inJf30zj41je)<br />大语言模型机器人AI
+JSVMP论文和专利：[https://surans.lanzouw.com/inJf30zj41je](https://surans.lanzouw.com/inJf30zj41je)<br />大语言模型机器人AI
 <a name="q4Gvg"></a>
+# 广告
+> **联系方式** 微信号：AlanHays | QQ号:2757317549
 
-[comment]: <> (# 广告)
-
-[comment]: <> (本项目开源起，星球内上线同步更新课程,零基础的伙伴们可从零课程开始学习，二课程感兴趣可以学习。<br />课程:《零.jsvmp原理与AST基础》、《一.手把手带你反编译jsvmp》、《二.手把手带你实现jsvmp》<br />试听公开课请查看的投稿哦，地址: [https://space.bilibili.com/247999712]&#40;https://space.bilibili.com/247999712&#41;<br />逆向知识学习交流&#40;星球&#41;: [https://t.zsxq.com/104HdF074]&#40;https://t.zsxq.com/104HdF074&#41;<br />微信号:AlanHays | QQ号:2757317549)
-
+本项目开源起，星球内上线同步更新课程,零基础的伙伴们可从零课程开始学习，二课程感兴趣可以学习。<br />课程目录:<br />《零.jsvmp原理与AST基础》<br />《一.手把手带你反编译jsvmp》<br />《二.手把手带你实现jsvmp》<br />试听公开课请查看的投稿哦，地址: [https://space.bilibili.com/247999712](https://space.bilibili.com/247999712)<br />逆向知识学习交流(星球): [https://t.zsxq.com/104HdF074](https://t.zsxq.com/104HdF074)
