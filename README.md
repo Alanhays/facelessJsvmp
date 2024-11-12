@@ -4,8 +4,6 @@
 
 <a name="C5UEx"></a>
 # 使用说明
-注：请勿将加固后的代码用于生产环境，由于项目开源导致加固代码很容易被反编译。
-> 学习交流QQ群：441030187 
 
 <a name="vr9dU"></a>
 ### 一.WEB页面步骤
@@ -84,16 +82,7 @@ let y = test();
 y.push(3);
 console.log(test());
 ```
-<a name="WhuR3"></a>
-# QQ学习交流群
-> QQ群号：441030187 | 欢迎大家进唠嗑，一起学习共同进步
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/26634545/1694400543247-a5e1122d-311e-4c9c-9fd0-1d03245d5f33.png#averageHue=%23f7f7f2&clientId=u0aec66c3-c070-4&from=paste&height=497&id=u6f0909bb&originHeight=497&originWidth=302&originalType=binary&ratio=1&rotation=0&showTitle=false&size=59784&status=done&style=none&taskId=uc09ed8c6-dd37-4c8e-b8fc-6dbbfc6e8c4&title=&width=302)
 <a name="wBeMH"></a>
 # 参考文献
 JSVMP论文和专利：[https://surans.lanzouw.com/inJf30zj41je](https://surans.lanzouw.com/inJf30zj41je)<br />大语言模型机器人AI
-<a name="q4Gvg"></a>
-# 广告
-> **联系方式** 微信号：AlanHays | QQ号:2757317549
-
-本项目开源起，星球内上线同步更新课程,零基础的伙伴们可从零课程开始学习，二课程感兴趣可以学习。<br />课程目录:<br />《零.jsvmp原理与AST基础》<br />《一.手把手带你反编译jsvmp》<br />《二.手把手带你实现jsvmp》<br />试听公开课请查看的投稿哦，地址: [https://space.bilibili.com/247999712](https://space.bilibili.com/247999712)<br />逆向知识学习交流(星球): [https://t.zsxq.com/104HdF074](https://t.zsxq.com/104HdF074)
